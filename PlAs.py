@@ -5,9 +5,11 @@ import keyboard as keyboard
 import os.path
 import configparser
 import chime as chime
+import datetime
 
 
 def main():
+
     # Setup Spotify connection
     scope = "user-read-currently-playing, user-library-read, user-library-modify, playlist-read-private, playlist-modify-private, playlist-modify-public"
     client_id = "95609027f8414070a6854d114173ddd5"
@@ -53,19 +55,32 @@ def main():
     chime.theme('zelda')
     chime.info()
     print("Ready.")
+    with open("PlAs.log", 'a') as log:
+        log.write("\n" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " "
+                  + "Ready.")
     keyboard.wait()
 
 
 def song_to_liked(sp):
     try:
         track = sp.current_user_playing_track()
+
         print("Adding current song to liked songs...\'" +
               track["item"]["name"] + "'")
+
+        with open("PlAs.log", 'a') as log:
+            log.write("\n" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " "
+                      + "Adding current song to liked songs...\'" +
+                      track["item"]["name"] + "'")
+
         sp.current_user_saved_tracks_add(tracks=[track['item']['id']])
         chime.theme('mario')
         chime.success()
     except Exception as e:
         print("Error occurred while processing request.")
+        with open("PlAs.log", 'a') as log:
+            log.write("\n" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " "
+                      + "Error occurred while processing request.")
 
 
 def song_to_playlist(sp):
@@ -75,8 +90,14 @@ def song_to_playlist(sp):
         f = open("selected-playlist.store", 'r')
         playlist_id = f.readline()
         f.close()
+
         print("Adding current song to specified playlist...\'" +
               track["item"]["name"] + "' to playlist \'" + playlist_id + "\'")
+
+        with open("PlAs.log", 'a') as log:
+            log.write("\n" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " "
+                      + "Adding current song to specified playlist...\'" +
+                      track["item"]["name"] + "' to playlist \'" + playlist_id + "\'")
 
         sp.playlist_add_items(playlist_id, items=[track['item']['id']])
 
@@ -84,6 +105,9 @@ def song_to_playlist(sp):
         chime.success()
     except Exception as e:
         print("Error while adding track to playlist... Do you own the playlist?")
+        with open("PlAs.log", 'a') as log:
+            log.write("\n" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " "
+                      + "Error while adding track to playlist... Do you own the playlist?")
 
 
 def song_remove_liked(sp):
@@ -91,11 +115,21 @@ def song_remove_liked(sp):
         track = sp.current_user_playing_track()
         print("Removing current song from your liked songs...\'" +
               track["item"]["name"] + "'")
+
+        with open("PlAs.log", 'a') as log:
+            log.write("\n" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " "
+                      + "Removing current song from your liked songs...\'" +
+                      track["item"]["name"] + "'")
+
         sp.current_user_saved_tracks_delete(tracks=[track['item']['id']])
         chime.theme('zelda')
         chime.warning()
     except Exception as e:
         print("Error occurred while processing request.")
+
+        with open("PlAs.log", 'a') as log:
+            log.write("\n" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " "
+                      + "Error occurred while processing request.")
 
 
 def song_remove_playlist(sp):
@@ -105,6 +139,11 @@ def song_remove_playlist(sp):
 
     print("Removing current song from your currently playing playlist... \'" +
           track['item']['name'] + "\' from playlist \'" + playlist_id + "\'")
+
+    with open("PlAs.log", 'a') as log:
+        log.write("\n" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " "
+                  + "Removing current song from your currently playing playlist... \'" +
+                  track['item']['name'] + "\' from playlist \'" + playlist_id + "\'")
 
     sp.playlist_remove_all_occurrences_of_items(
         playlist_id, items=[track['item']['id']])
@@ -122,6 +161,10 @@ def set_active_playlist(sp):
     with open("selected-playlist.store", 'w') as f:
         f.write(playlist)
     print("Setting active playlist to \'" + playlist + "\'")
+
+    with open("PlAs.log", 'a') as log:
+        log.write("\n" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " "
+                  + "Setting active playlist to \'" + playlist + "\'")
 
     chime.theme('mario')
     chime.info()
