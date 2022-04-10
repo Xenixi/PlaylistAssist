@@ -7,7 +7,6 @@ import configparser
 import chime as chime
 
 
-
 def main():
     # Setup Spotify connection
     scope = "user-read-currently-playing, user-library-read, user-library-modify, playlist-read-private, playlist-modify-private, playlist-modify-public"
@@ -28,10 +27,10 @@ def main():
 
     if not os.path.exists("hotkeys.config"):
         hk_cf.add_section("MAIN")
-        hk_cf["MAIN"]["song-to-playlist"] = "f9"
-        hk_cf["MAIN"]["song-to-liked"] = "f10"
-        hk_cf["MAIN"]["remove-from-current-playlist"] = "ctrl+shift+f9"
-        hk_cf["MAIN"]["remove-from-liked"] = "ctrl+shift+f10"
+        hk_cf["MAIN"]["song-to-playlist"] = "f10"
+        hk_cf["MAIN"]["song-to-liked"] = "f9"
+        hk_cf["MAIN"]["remove-from-current-playlist"] = "ctrl+shift+f10"
+        hk_cf["MAIN"]["remove-from-liked"] = "ctrl+shift+f9"
         hk_cf["MAIN"]["set-active-playlist"] = "alt+f7"
         with open("hotkeys.config", 'w') as f:
             hk_cf.write(f)
@@ -48,7 +47,8 @@ def main():
                         lambda: song_remove_liked(sp=sp))
     keyboard.add_hotkey(
         hk_cf["MAIN"]["remove-from-current-playlist"], lambda: song_remove_playlist(sp=sp))
-    keyboard.add_hotkey(hk_cf["MAIN"]["set-active-playlist"], lambda: set_active_playlist(sp=sp))
+    keyboard.add_hotkey(hk_cf["MAIN"]["set-active-playlist"],
+                        lambda: set_active_playlist(sp=sp))
 
     chime.theme('zelda')
     chime.info()
@@ -59,7 +59,8 @@ def main():
 def song_to_liked(sp):
     try:
         track = sp.current_user_playing_track()
-        print("Adding current song to liked songs...\'" + track["item"]["name"] + "'")
+        print("Adding current song to liked songs...\'" +
+              track["item"]["name"] + "'")
         sp.current_user_saved_tracks_add(tracks=[track['item']['id']])
         chime.theme('mario')
         chime.success()
@@ -68,15 +69,28 @@ def song_to_liked(sp):
 
 
 def song_to_playlist(sp):
-    print("Adding current song to specified playlist...")
-    chime.theme('mario')
-    chime.success()
+    try:
+
+        track = sp.current_user_playing_track()
+        f = open("selected-playlist.store", 'r')
+        playlist_id = f.readline()
+        f.close()
+        print("Adding current song to specified playlist...\'" +
+              track["item"]["name"] + "' to playlist \'" + playlist_id + "\'")
+
+        sp.playlist_add_items(playlist_id, items=[track['item']['id']])
+
+        chime.theme('mario')
+        chime.success()
+    except Exception as e:
+        print("Error while adding track to playlist... Do you own the playlist?")
 
 
 def song_remove_liked(sp):
     try:
         track = sp.current_user_playing_track()
-        print("Removing current song from your liked songs...\'" + track["item"]["name"] + "'")
+        print("Removing current song from your liked songs...\'" +
+              track["item"]["name"] + "'")
         sp.current_user_saved_tracks_delete(tracks=[track['item']['id']])
         chime.theme('zelda')
         chime.warning()
@@ -85,23 +99,32 @@ def song_remove_liked(sp):
 
 
 def song_remove_playlist(sp):
-    print("Removing current song from your playlist...")
+
+    track = sp.current_user_playing_track()
+    playlist_id = track['context']['uri']
+
+    print("Removing current song from your currently playing playlist... \'" +
+          track['item']['name'] + "\' from playlist \'" + playlist_id + "\'")
+
+    sp.playlist_remove_all_occurrences_of_items(
+        playlist_id, items=[track['item']['id']])
+
     chime.theme('zelda')
     chime.warning()
+
 
 def set_active_playlist(sp):
     track = sp.current_user_playing_track()
     playlist = track['context']['uri']
 
-    #should add something to verify playlists are owned by user to avoid confusion
+    # should add something to verify playlists are owned by user to avoid confusion
 
     with open("selected-playlist.store", 'w') as f:
         f.write(playlist)
-    print("Active playlist set to \'" + playlist + "\'")
+    print("Setting active playlist to \'" + playlist + "\'")
 
-    playlist = track['item']['playlist']
-
-    print("Setting current playlist active... " + playlist['item']['name'])
+    chime.theme('mario')
+    chime.info()
 
 
 main()
