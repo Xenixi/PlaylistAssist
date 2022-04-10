@@ -2,11 +2,13 @@ import spotipy
 import json
 from spotipy.oauth2 import SpotifyOAuth
 import keyboard as keyboard
+import os
 import os.path
 import configparser
 import chime as chime
 import datetime
 import sys
+import time
 
 
 def main():
@@ -24,7 +26,7 @@ def main():
 
     if not os.path.exists("README.md"):
         f = open("README.md", 'w')
-        f.write("Welcome to PlaylistAssist. Set your hotkeys in hotkeys.config. ctrl+shift+f1 exits.\n  Functionality:\n    song-to-liked - adds currently playing song to your liked songs\n    remove-from-liked - removes currently playing song from your liked songs\n\n    set-active-playlist - sets currently playing playlist as the active playlist for addition of songs with song-to-playlist\n    (Must be playing the playlist you want to set active at time of hotkey press)\n\n    song-to-playlist - adds currently playing song to the active playlist (set by set-active-playlist)\n    remove-from-current-playlist - removes currently playing song from currently playing playlist (not necessarily the active playlist!)")
+        f.write("Welcome to PlaylistAssist. Set your hotkeys in hotkeys.config. ctrl+shift+f1 exits.\n FIRST TIME USERS: Run normal launch first to authenticate w/ Spotify before using background launch. \nFunctionality:\n    song-to-liked - adds currently playing song to your liked songs\n    remove-from-liked - removes currently playing song from your liked songs\n\n    set-active-playlist - sets currently playing playlist as the active playlist for addition of songs with song-to-playlist\n    (Must be playing the playlist you want to set active at time of hotkey press)\n\n    song-to-playlist - adds currently playing song to the active playlist (set by set-active-playlist)\n    remove-from-current-playlist - removes currently playing song from currently playing playlist (not necessarily the active playlist!)")
 
     hk_cf = configparser.ConfigParser()
 
@@ -53,7 +55,7 @@ def main():
     keyboard.add_hotkey(hk_cf["MAIN"]["set-active-playlist"],
                         lambda: set_active_playlist(sp=sp))
 
-    keyboard.add_hotkey("ctrl+shift+f1", lambda: print("Python process terminated. You may close this window now.") & sys.exit())
+    keyboard.add_hotkey("ctrl+shift+f1", lambda: print("Python process terminated. You may close this window now.") & os.system('start cmd.exe /k \"echo PlaylistAssist Background Process Closed && pause && exit\"')& sys.exit())
 
     chime.theme('zelda')
     chime.info()
