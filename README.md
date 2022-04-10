@@ -1,0 +1,1 @@
+Welcome to PlaylistAssist. Set your hotkeys in hotkeys.config.
