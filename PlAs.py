@@ -21,7 +21,7 @@ def main():
 
     if not os.path.exists("README.md"):
         f = open("README.md", 'w')
-        f.write("Welcome to PlaylistAssist. Set your hotkeys in hotkeys.config.")
+        f.write("Welcome to PlaylistAssist. Set your hotkeys in hotkeys.config.\n  Functionality:\n    song-to-liked - adds currently playing song to your liked songs\n    remove-from-liked - removes currently playing song from your liked songs\n\n    set-active-playlist - sets currently playing playlist as the active playlist for addition of songs with song-to-playlist\n    (Must be playing the playlist you want to set active at time of hotkey press)\n\n    song-to-playlist - adds currently playing song to the active playlist (set by set-active-playlist)\n    remove-from-current-playlist - removes currently playing song from currently playing playlist (not necessarily the active playlist!)")
 
     hk_cf = configparser.ConfigParser()
 
