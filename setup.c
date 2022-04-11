@@ -71,14 +71,20 @@ int main(void)
     printf("\n**Skipping this step...\n");
 
     printf("\nClearing cache...");
-    while (true)
+    for(int i=0; i<10; i++)
         {
             if (remove(".cache") == 0)
             {
+                printf("\nCache cleared.\n");
                 break;
+            } else {
+                Sleep(500);
+                if(i==9){
+                    printf("\nCache not cleared: either busy or doesn't exist.");
+                }
             }
         }
-    printf("\nCache cleared.\n");
+    
 
     // Sleep(500);
 
