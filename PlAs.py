@@ -86,6 +86,8 @@ def song_to_liked(sp):
         chime.success()
     except Exception as e:
         print("Error occurred while processing request.")
+        chime.theme('mario')
+        chime.warning()
         with open("PlAs.log", 'a') as log:
             log.write("\n" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " "
                       + "Error occurred while processing request. (song_to_liked)")
@@ -113,6 +115,8 @@ def song_to_playlist(sp):
         chime.success()
     except Exception as e:
         print("Error while adding track to playlist... Do you own the playlist?")
+        chime.theme('mario')
+        chime.warning()
         with open("PlAs.log", 'a') as log:
             log.write("\n" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " "
                       + "Error while adding track to playlist... Do you own the playlist? (song_to_playlist)")
@@ -134,7 +138,8 @@ def song_remove_liked(sp):
         chime.warning()
     except Exception as e:
         print("Error occurred while processing request.")
-
+        chime.theme('mario')
+        chime.warning()
         with open("PlAs.log", 'a') as log:
             log.write("\n" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " "
                       + "Error occurred while processing request. (song_remove_liked)")
@@ -160,7 +165,8 @@ def song_remove_playlist(sp):
         chime.warning()
     except Exception as e:
         print("Error occurred while processing request. (song_remove_playlist)")
-
+        chime.theme('mario')
+        chime.warning()
         with open("PlAs.log", 'a') as log:
             log.write("\n" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " "
                       + "Error occurred while processing request.")
@@ -184,7 +190,10 @@ def set_active_playlist(sp):
         chime.theme('mario')
         chime.info()
     except Exception as e:
-        print("Error occurred while processing request.")
+        print("Error occurred while processing request. Make sure spotify is playing!")
+        #print(e)
+        chime.theme('mario')
+        chime.warning()
 
         with open("PlAs.log", 'a') as log:
             log.write("\n" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " "
