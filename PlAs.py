@@ -26,17 +26,24 @@ def main():
 
     if not os.path.exists("README.md"):
         f = open("README.md", 'w')
-        f.write("Welcome to PlaylistAssist by Kobe McManus (github.com/xenixi). Set your hotkeys in hotkeys.config.\n\nctrl+shift+f1 exits. | ctrl+shift+f2 exits and starts new console process | Use f7 to see if PlaylistAssist is running in background\n\nFIRST TIME USERS:\nRun setup.exe to install Python (if needed) & Python packages.\nRun normal launch first to authenticate w/ Spotify before using background launch.\n\nFunctionality:\n    song-to-liked - adds currently playing song to your liked songs\n    remove-from-liked - removes currently playing song from your liked songs\n\n    set-active-playlist - sets currently playing playlist as the active playlist for addition of songs with song-to-playlist\n    (Must be playing the playlist you want to set active at time of hotkey press)\n\n    song-to-playlist - adds currently playing song to the active playlist (set by set-active-playlist)\n    remove-from-current-playlist - removes currently playing song from currently playing playlist (not necessarily the active playlist!)")
+        f.write("Welcome to PlaylistAssist by Kobe McManus (github.com/xenixi). Set your hotkeys in hotkeys.config.\n\nDEFAULT UTIL HOTKEYS:\nctrl+shift+f1 exits. | ctrl+shift+f2 exits and starts new console process | Use alt+f1 to see if PlaylistAssist is running in background\n\nFIRST TIME USERS:\nRun setup.exe to install Python (if needed) & Python packages.\nRun normal launch first to authenticate w/ Spotify before using background launch.\n\nFunctionality:\n    song-to-liked - adds currently playing song to your liked songs\n    remove-from-liked - removes currently playing song from your liked songs\n\n    set-active-playlist - sets currently playing playlist as the active playlist for addition of songs with song-to-playlist\n    (Must be playing the playlist you want to set active at time of hotkey press)\n\n    song-to-playlist - adds currently playing song to the active playlist (set by set-active-playlist)\n    remove-from-current-playlist - removes currently playing song from currently playing playlist (not necessarily the active playlist!)")
 
     hk_cf = configparser.ConfigParser()
 
     if not os.path.exists("hotkeys.config"):
         hk_cf.add_section("MAIN")
+        hk_cf.add_section("UTIL")
         hk_cf["MAIN"]["song-to-playlist"] = "f10"
         hk_cf["MAIN"]["song-to-liked"] = "f9"
         hk_cf["MAIN"]["remove-from-current-playlist"] = "ctrl+shift+f10"
         hk_cf["MAIN"]["remove-from-liked"] = "ctrl+shift+f9"
         hk_cf["MAIN"]["set-active-playlist"] = "alt+f7"
+
+        hk_cf["UTIL"]["exit-playlistassist"] = "ctrl+shift+f1"
+        hk_cf["UTIL"]["reopen-in-console-mode"] = "ctrl+shift+f2"
+        hk_cf["UTIL"]["verify-active"] = "alt+f1"
+
+        
         with open("hotkeys.config", 'w') as f:
             hk_cf.write(f)
 
@@ -56,9 +63,10 @@ def main():
                         lambda: set_active_playlist(sp=sp))
 
     #using or operator to include multiple statements in lambda 
-    keyboard.add_hotkey("ctrl+shift+f1", lambda: print("Python process terminated. You may close this window now.") or os.system('start cmd.exe /k \"echo PlaylistAssist Background Process Closed && pause && exit\"') or sys.exit())
-    keyboard.add_hotkey("ctrl+shift+f2", lambda: print("Python process terminated. New process spawned in console mode.") or os.system('start cmd.exe /k \"launch.exe\"') or sys.exit())
-    keyboard.add_hotkey("f7", lambda: (chime.theme('mario') or chime.info()))
+    ##consider adding these to the config file as well
+    keyboard.add_hotkey(hk_cf["UTIL"]["exit-playlistassist"], lambda: print("Python process terminated. You may close this window now.") or os.system('start cmd.exe /k \"echo PlaylistAssist Background Process Closed && pause && exit\"') or sys.exit())
+    keyboard.add_hotkey(hk_cf["UTIL"]["reopen-in-console-mode"], lambda: print("Python process terminated. New process spawned in console mode.") or os.system('start cmd.exe /k \"launch.exe\"') or sys.exit())
+    keyboard.add_hotkey(hk_cf["UTIL"]["verify-active"], lambda: (chime.theme('mario') or chime.info()))
 
     chime.theme('zelda')
     chime.info()

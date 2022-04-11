@@ -1,6 +1,7 @@
 Welcome to PlaylistAssist by Kobe McManus (github.com/xenixi). Set your hotkeys in hotkeys.config.
 
-ctrl+shift+f1 exits. | ctrl+shift+f2 exits and starts new console process | Use f7 to see if PlaylistAssist is running in background
+DEFAULT UTIL HOTKEYS:
+ctrl+shift+f1 exits. | ctrl+shift+f2 exits and starts new console process | Use alt+f1 to see if PlaylistAssist is running in background
 
 FIRST TIME USERS:
 Run setup.exe to install Python (if needed) & Python packages.
