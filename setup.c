@@ -10,7 +10,7 @@ int main(void)
     FILE *fp;
 
     printf("Running setup...\nChecking Python version...\n");
-    Sleep(500);
+    //  Sleep(500);
     fp = popen("python --version", "r");
 
     char read[64];
@@ -50,7 +50,7 @@ int main(void)
             }
         }
 
-        Sleep(1500);
+        // Sleep(1500);
     }
 
     printf("Installing python packages...\n");
@@ -60,34 +60,32 @@ int main(void)
     char read2[1024];
 
     while (fgets(read2, sizeof(read2), fp))
-        {
-            printf("%s", read2);
-        }
+    {
+        printf("%s", read2);
+    }
 
-    Sleep(2000);
+    // Sleep(1500);
 
     printf("\nInstalling shortcuts...\n");
 
-    Sleep(1000);
+    printf("\n**Skipping this step...\n");
 
-    fp = popen("python setup2.py", "r");
+    // Sleep(500);
 
-    
+    // fp = popen("powershell -Command \"Start-Process python setup2.py -Verb RunAs\"", "r");
 
     while (fgets(read2, sizeof(read2), fp))
-        {
-            printf("%s", read2);
-        }
+    {
+        printf("%s", read2);
+    }
 
     printf("\nOperation completed.\n");
 
-    //pause
+    // pause
     printf("Press any key to exit.");
     getchar();
 
     pclose(fp);
-
-
 
     return (0);
 };

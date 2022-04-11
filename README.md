@@ -1,5 +1,11 @@
-Welcome to PlaylistAssist. Set your hotkeys in hotkeys.config. ctrl+shift+f1 exits.
- FIRST TIME USERS: Run normal launch first to authenticate w/ Spotify before using background launch. 
+Welcome to PlaylistAssist by Kobe McManus (github.com/xenixi). Set your hotkeys in hotkeys.config.
+
+ctrl+shift+f1 exits. | ctrl+shift+f2 exits and starts new console process | Use f7 to see if PlaylistAssist is running in background
+
+FIRST TIME USERS:
+Run setup.exe to install Python (if needed) & Python packages.
+Run normal launch first to authenticate w/ Spotify before using background launch.
+
 Functionality:
     song-to-liked - adds currently playing song to your liked songs
     remove-from-liked - removes currently playing song from your liked songs
