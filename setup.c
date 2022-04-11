@@ -70,6 +70,16 @@ int main(void)
 
     printf("\n**Skipping this step...\n");
 
+    printf("\nClearing cache...");
+    while (true)
+        {
+            if (remove(".cache") == 0)
+            {
+                break;
+            }
+        }
+    printf("\nCache cleared.\n");
+
     // Sleep(500);
 
     // fp = popen("powershell -Command \"Start-Process python setup2.py -Verb RunAs\"", "r");
