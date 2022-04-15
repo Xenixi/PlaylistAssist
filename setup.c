@@ -11,10 +11,10 @@
 
 // **********************************************************************************
 
-static const char *python_latest = "3.10.4";
+static const char *python_latest = "3.7.6";
 static const int acceptable_versions_quantity = 4;
 static const char *python_acceptable_versions[] =
-    {"3.10.", "3.9.", "3.8.", "3.7."};
+    {"3.6.", "3.9.", "3.8.", "3.7."};
 
 // **********************************************************************************
 int main(void)
@@ -57,8 +57,36 @@ int main(void)
 
         char read[1024];
 
-        fp = popen("curl https://www.python.org/ftp/python/3.10.4/python-3.10.4-amd64.exe --output pyinstaller.exe && pyinstaller.exe InstallAllUsers=1 PrependPath=1", "r");
+        char *cmd_begin = "curl https://www.python.org/ftp/python/";
+        char *cmd_mid = "/python-";
+        char *cmd_end = "-amd64.exe --output pyinstaller.exe && pyinstaller.exe InstallAllUsers=1 PrependPath=1";
+        printf("\nPOINT 0.5\n");
+        char cmd[strlen(cmd_begin) + strlen(cmd_mid) + strlen(cmd_end) + 24];
+        cmd[0] = '\0';
 
+        printf("\nPOINT 1\n");
+        strcat(cmd, cmd_begin);
+        printf("\nPOINT 1.3\n");
+        strcat(cmd, python_latest);
+
+        printf("\nPOINT 1.5\n");
+
+        strcat(cmd, cmd_mid);
+
+        printf("\nPOINT 1.7\n");
+
+        strcat(cmd, python_latest);
+
+        printf("\nPOINT 1.9\n");
+
+        strcat(cmd, cmd_end);
+
+        printf("\nPOINT 2\n");
+
+        fp = popen(cmd, "r");
+
+        printf("\nPOINT 3\n");
+        
         while (fgets(read, sizeof(read), fp))
         {
             printf("%s", read);
