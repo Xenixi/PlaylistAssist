@@ -11,14 +11,28 @@
 
 // **********************************************************************************
 
-static const char *python_latest = "3.7.6";
+static const char *python_latest = "3.10.4";
 static const int acceptable_versions_quantity = 4;
 static const char *python_acceptable_versions[] =
-    {"3.6.", "3.9.", "3.8.", "3.7."};
+    {"3.10.", "3.9.", "3.8.", "3.7."};
 
 // **********************************************************************************
-int main(void)
+int main(int argc, char *argv[])
 {
+    if (!(argc == 2 && strcmp(argv[1], "run-installer") == 0))
+    {
+        char *cmd_begin = "powershell -Command \"Start-Process '";
+        char *cmd_end = "' run-installer -Verb RunAs\"";
+        char cmd[128 + strlen(argv[0])];
+        cmd[0] = '\0';
+
+        strcat(cmd, cmd_begin);
+        strcat(cmd, argv[0]);
+        strcat(cmd, cmd_end);
+
+        system(cmd);
+        return (1);
+    }
     FILE *fp;
 
     printf("Running setup...\nChecking Python version...\n");
@@ -86,7 +100,7 @@ int main(void)
         fp = popen(cmd, "r");
 
         printf("\nPOINT 3\n");
-        
+
         while (fgets(read, sizeof(read), fp))
         {
             printf("%s", read);
