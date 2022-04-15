@@ -1,10 +1,22 @@
+/*
+ * ******************************************************
+ * Playlist Assist Setup / Kobe McManus (Xenixi), 2022 *
+ * ******************************************************
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
 #include <stdbool.h>
 #include <string.h>
-static const char *python_latest = "3.10.4";
 
+// **********************************************************************************
+
+static const char *python_latest = "3.10.4";
+static const int acceptable_versions_quantity = 4;
+static const char *python_acceptable_versions[] =
+    {"3.10.", "3.9.", "3.8.", "3.7."};
+
+// **********************************************************************************
 int main(void)
 {
     FILE *fp;
@@ -22,11 +34,23 @@ int main(void)
         if (strstr(read, python_latest) != NULL)
         {
             match = true;
+            break;
+        }
+        else
+        {
+            for (int i = 0; i < (acceptable_versions_quantity - 1); i++)
+            {
+                if (strstr(read, python_acceptable_versions[i]) != NULL)
+                {
+                    match = true;
+                    break;
+                }
+            }
         }
     }
 
-    printf("Matching version: ");
-    printf(match ? "true" : "false");
+    printf("Adequate Python Version installed: ");
+    printf(match ? "true\n" : "false\n");
 
     if (!match)
     {
@@ -52,10 +76,14 @@ int main(void)
 
         // Sleep(1500);
     }
+    else
+    {
+        printf("Skipping Python installation step...\n");
+    }
 
-    printf("Installing python packages...\n");
+    printf("Installing Python packages...\n");
 
-    fp = popen("pip install spotipy && pip install keyboard && pip install chime", "r");
+    fp = popen("pip install spotipy && pip install pynput && pip install chime", "r");
 
     char read2[1024];
 
@@ -71,20 +99,22 @@ int main(void)
     printf("\n**Skipping this step...\n");
 
     printf("\nClearing cache...");
-    for(int i=0; i<10; i++)
+    for (int i = 0; i < 10; i++)
+    {
+        if (remove(".cache") == 0)
         {
-            if (remove(".cache") == 0)
+            printf("\nCache cleared.\n");
+            break;
+        }
+        else
+        {
+            Sleep(500);
+            if (i == 9)
             {
-                printf("\nCache cleared.\n");
-                break;
-            } else {
-                Sleep(500);
-                if(i==9){
-                    printf("\nCache not cleared: either busy or doesn't exist.");
-                }
+                printf("\nCache not cleared: either busy or doesn't exist.");
             }
         }
-    
+    }
 
     // Sleep(500);
 

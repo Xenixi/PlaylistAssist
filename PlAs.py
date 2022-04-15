@@ -1,7 +1,10 @@
+########################################################
+#*******************************************************
+#* Playlist Assist - Main/ Kobe McManus (Xenixi), 2022 *
+#*******************************************************
 import spotipy
 import json
 from spotipy.oauth2 import SpotifyOAuth
-#import keyboard as keyboard
 import os
 import os.path
 import configparser
@@ -57,26 +60,6 @@ def main():
             hk_cf.write(f)
 
     hk_cf.read("hotkeys.config")
-
-    # The good stuff
-
-    #keyboard.add_hotkey(hk_cf["MAIN"]["song-to-liked"],
-    #                     lambda: song_to_liked(sp=sp))
-    #keyboard.add_hotkey(hk_cf["MAIN"]["song-to-playlist"],
-    #                     lambda: song_to_playlist(sp=sp))
-    # keyboard.add_hotkey(hk_cf["MAIN"]["remove-from-liked"],
-    #                     lambda: song_remove_liked(sp=sp))
-    # keyboard.add_hotkey(
-    #     hk_cf["MAIN"]["remove-from-current-playlist"], lambda: song_remove_playlist(sp=sp))
-    # keyboard.add_hotkey(hk_cf["MAIN"]["set-active-playlist"],
-    #                     lambda: set_active_playlist(sp=sp))
-
-    #using or operator to include multiple statements in lambda
-    ##consider adding these to the config file as well
-    # keyboard.add_hotkey(hk_cf["UTIL"]["exit-playlistassist"], lambda: print("Python process terminated. You may close this window now.") or os.system('start cmd.exe /k \"echo PlaylistAssist Background Process Closed && pause && exit\"') or sys.exit())
-    # keyboard.add_hotkey(hk_cf["UTIL"]["reopen-in-console-mode"], lambda: print("Python process terminated. New process spawned in console mode.") or os.system('start cmd.exe /k \"launch.exe\"') or sys.exit())
-    # keyboard.add_hotkey(hk_cf["UTIL"]["verify-active"], lambda: (chime.theme('mario') or chime.info()))
-
     key_map = {
         hk_cf["MAIN"]["song-to-liked"]:
         song_to_liked,
@@ -102,7 +85,6 @@ def main():
         lambda: (chime.theme('mario') or chime.info())
     }
 
-    #################
     chime.theme('zelda')
     chime.info()
     print("Ready.")
@@ -114,9 +96,6 @@ def main():
     with keyboard.Listener(on_press=on_press,
                            on_release=on_release) as listener:
         listener.join()
-
-
-# keyboard.wait()
 
 
 def on_press(key):

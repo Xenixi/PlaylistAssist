@@ -6,3 +6,4 @@
 *.exe
 *.lnk
 *.ico
+build/*
