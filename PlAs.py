@@ -1,7 +1,7 @@
 import spotipy
 import json
 from spotipy.oauth2 import SpotifyOAuth
-import keyboard as keyboard
+#import keyboard as keyboard
 import os
 import os.path
 import configparser
@@ -9,9 +9,15 @@ import chime as chime
 import datetime
 import sys
 import time
+from pynput import keyboard
+
+key_presses = []
+
 
 
 def main():
+    global hk_cf
+    global sp
 
     # Setup Spotify connection
     scope = "user-read-currently-playing, user-library-read, user-library-modify, playlist-read-private, playlist-modify-private, playlist-modify-public"
@@ -51,30 +57,96 @@ def main():
 
     # The good stuff
 
-    keyboard.add_hotkey(hk_cf["MAIN"]["song-to-liked"],
-                        lambda: song_to_liked(sp=sp))
-    keyboard.add_hotkey(hk_cf["MAIN"]["song-to-playlist"],
-                        lambda: song_to_playlist(sp=sp))
-    keyboard.add_hotkey(hk_cf["MAIN"]["remove-from-liked"],
-                        lambda: song_remove_liked(sp=sp))
-    keyboard.add_hotkey(
-        hk_cf["MAIN"]["remove-from-current-playlist"], lambda: song_remove_playlist(sp=sp))
-    keyboard.add_hotkey(hk_cf["MAIN"]["set-active-playlist"],
-                        lambda: set_active_playlist(sp=sp))
+   #keyboard.add_hotkey(hk_cf["MAIN"]["song-to-liked"],
+   #                     lambda: song_to_liked(sp=sp))
+   #keyboard.add_hotkey(hk_cf["MAIN"]["song-to-playlist"],
+   #                     lambda: song_to_playlist(sp=sp))
+   # keyboard.add_hotkey(hk_cf["MAIN"]["remove-from-liked"],
+   #                     lambda: song_remove_liked(sp=sp))
+   # keyboard.add_hotkey(
+   #     hk_cf["MAIN"]["remove-from-current-playlist"], lambda: song_remove_playlist(sp=sp))
+   # keyboard.add_hotkey(hk_cf["MAIN"]["set-active-playlist"],
+   #                     lambda: set_active_playlist(sp=sp))
 
     #using or operator to include multiple statements in lambda 
     ##consider adding these to the config file as well
-    keyboard.add_hotkey(hk_cf["UTIL"]["exit-playlistassist"], lambda: print("Python process terminated. You may close this window now.") or os.system('start cmd.exe /k \"echo PlaylistAssist Background Process Closed && pause && exit\"') or sys.exit())
-    keyboard.add_hotkey(hk_cf["UTIL"]["reopen-in-console-mode"], lambda: print("Python process terminated. New process spawned in console mode.") or os.system('start cmd.exe /k \"launch.exe\"') or sys.exit())
-    keyboard.add_hotkey(hk_cf["UTIL"]["verify-active"], lambda: (chime.theme('mario') or chime.info()))
+   # keyboard.add_hotkey(hk_cf["UTIL"]["exit-playlistassist"], lambda: print("Python process terminated. You may close this window now.") or os.system('start cmd.exe /k \"echo PlaylistAssist Background Process Closed && pause && exit\"') or sys.exit())
+   # keyboard.add_hotkey(hk_cf["UTIL"]["reopen-in-console-mode"], lambda: print("Python process terminated. New process spawned in console mode.") or os.system('start cmd.exe /k \"launch.exe\"') or sys.exit())
+   # keyboard.add_hotkey(hk_cf["UTIL"]["verify-active"], lambda: (chime.theme('mario') or chime.info()))
 
+
+
+
+
+    #################
     chime.theme('zelda')
     chime.info()
     print("Ready.")
     with open("PlAs.log", 'a') as log:
         log.write("\n" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " "
                   + "Ready.")
-    keyboard.wait()
+
+    
+    with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
+        listener.join()
+   # keyboard.wait()
+
+
+
+def on_press(key):
+    global key_presses
+    if not key_presses.__contains__(str(key)):
+        key_presses.append(str(key))
+        key_combo_execute(key_presses)
+
+    
+def on_release(key):
+    key_presses.clear()
+
+def key_combo_execute(key_presses):
+    #pass by value
+    keys_parsed = key_presses[:]
+    
+    for i in range(len(keys_parsed)):
+        if str(keys_parsed[i]).startswith("Key."):
+            keys_parsed[i] = keys_parsed[i][4:]
+
+    if keys_parsed.__contains__("ctrl_l"):
+        keys_parsed[keys_parsed.index("ctrl_l")] = "ctrl"
+    if keys_parsed.__contains__("ctrl_r"):
+        keys_parsed[keys_parsed.index("ctrl_r")] = "ctrl"
+    if keys_parsed.__contains__("alt_l"):
+        keys_parsed[keys_parsed.index("alt_l")] = "alt"
+    if keys_parsed.__contains__("alt_gr"):
+        keys_parsed[keys_parsed.index("alt_gr")] = "alt"
+    if keys_parsed.__contains__("shift"):
+        keys_parsed[keys_parsed.index("shift")] = "shift"
+    if keys_parsed.__contains__("shift_r"):
+        keys_parsed[keys_parsed.index("shift_r")] = "shift"
+    ##
+
+
+    global hk_cf
+    global sp
+
+    ##USE A DICTIONARY FOR THIS STUFF!!
+
+    hk = hk_cf["MAIN"]["song-to-liked"].split("+")
+    
+    match = True
+    for key in keys_parsed:
+        if not hk.__contains__(key):
+            match = False
+
+    if match:
+        print("match")
+        #song_to_liked(sp=sp)
+    else:
+        print("no match")
+
+
+
+
 
 
 def song_to_liked(sp):
