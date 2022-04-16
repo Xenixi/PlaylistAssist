@@ -11,26 +11,34 @@
 
 // **********************************************************************************
 
-static const char *python_latest = "3.10.4";
+static const char *python_latest = "3.10.3";
 static const int acceptable_versions_quantity = 4;
 static const char *python_acceptable_versions[] =
-    {"3.10.", "3.9.", "3.8.", "3.7."};
+    {"3.5.", "3.9.", "3.8.", "3.7."};
 
 // **********************************************************************************
 int main(int argc, char *argv[])
 {
-    if (!(argc == 2 && strcmp(argv[1], "run-installer") == 0))
+    char *cmd_begin = "powershell -Command \"Start-Process '";
+    char *cmd_end = "' run-installer -Verb RunAs\"";
+    char elevate_cmd[4096];
+    elevate_cmd[0] = '\0';
+
+    strcat(elevate_cmd, cmd_begin);
+    strcat(elevate_cmd, argv[0]);
+    strcat(elevate_cmd, cmd_end);
+
+    char *skip_py_cmd_end = "' skip-py-install -Verb RunAs\"";
+    char skip_py_cmd[4096];
+    skip_py_cmd[0] = '\0';
+
+    strcat(skip_py_cmd, cmd_begin);
+    strcat(skip_py_cmd, argv[0]);
+    strcat(skip_py_cmd, skip_py_cmd_end);
+
+    if (!(argc == 2 && (strcmp(argv[1], "run-installer") == 0 || strcmp(argv[1], "skip-py-install") == 0)))
     {
-        char *cmd_begin = "powershell -Command \"Start-Process '";
-        char *cmd_end = "' run-installer -Verb RunAs\"";
-        char cmd[128 + strlen(argv[0])];
-        cmd[0] = '\0';
-
-        strcat(cmd, cmd_begin);
-        strcat(cmd, argv[0]);
-        strcat(cmd, cmd_end);
-
-        system(cmd);
+        system(elevate_cmd);
         return (1);
     }
     FILE *fp;
@@ -66,7 +74,7 @@ int main(int argc, char *argv[])
     printf("Adequate Python Version installed: ");
     printf(match ? "true\n" : "false\n");
 
-    if (!match)
+    if (!match && !(strcmp(argv[1], "skip-py-install") == 0))
     {
 
         char read[1024];
@@ -75,7 +83,7 @@ int main(int argc, char *argv[])
         char *cmd_mid = "/python-";
         char *cmd_end = "-amd64.exe --output pyinstaller.exe && pyinstaller.exe InstallAllUsers=1 PrependPath=1";
 
-        char cmd[strlen(cmd_begin) + strlen(cmd_mid) + strlen(cmd_end) + 24];
+        char cmd[1024];
         cmd[0] = '\0';
 
         strcat(cmd, cmd_begin);
@@ -101,7 +109,10 @@ int main(int argc, char *argv[])
             }
         }
 
-        // Sleep(1500);
+        // restart
+
+        system(skip_py_cmd);
+        return (0);
     }
     else
     {
