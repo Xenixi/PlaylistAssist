@@ -11,10 +11,10 @@
 
 // **********************************************************************************
 
-static const char *python_latest = "3.10.3";
+static const char *python_latest = "3.10.4";
 static const int acceptable_versions_quantity = 4;
 static const char *python_acceptable_versions[] =
-    {"3.5.", "3.9.", "3.8.", "3.7."};
+    {"3.10.", "3.9.", "3.8.", "3.7."};
 
 // **********************************************************************************
 int main(int argc, char *argv[])
@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
         }
         else
         {
-            Sleep(500);
+            Sleep(250);
             if (i == 9)
             {
                 printf("\nCache not cleared: either busy or doesn't exist.");
@@ -163,10 +163,85 @@ int main(int argc, char *argv[])
         printf("%s", read2);
     }
 
-    printf("\nOperation completed.\n");
+    char usr_choice;
+    // NOT YET IMPLEMENTED: START MENU SHORTCUTS
+    /*
+     printf("\n----\nCreate Start Menu Shortcut?(y/n):");
+     usr_choice = getchar();
+     getchar();
 
+     if (usr_choice == 'y' && false)
+     {
+         // install shortcut
+         char cmd[4096] = "";
+         char *begin_cmd = "mklink /d \"C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Playlist Assist\" ";
+         char launch_path[2048];
+         _fullpath(launch_path, "/", 2048);
+
+         strcat(cmd, begin_cmd);
+         strcat(cmd, launch_path);
+
+         fp = popen(cmd, "r");
+
+         char read3[1024];
+
+         while (fgets(read3, sizeof(read3), fp))
+         {
+             printf("%s", read3);
+         }
+     }
+ */
+    printf("\n----\nRun On Startup?(y/n):");
+
+    usr_choice = getchar();
+
+    if (usr_choice == 'y')
+    {
+        // install startup shortcut
+        char cmd[4096] = "echo cd /d \"";
+        char launch_path[2048];
+
+        _fullpath(launch_path, "launch-background.exe", 2048);
+
+        char *end_cmd = " -s >> \"C:/ProgramData/Microsoft/Windows/Start Menu/Programs/StartUp/StartupPlaylistAssist.bat\"";
+
+        strcat(cmd, launch_path);
+        strcat(cmd, "/..\" ^&^& ");
+        strcat(cmd, launch_path);
+        strcat(cmd, end_cmd);
+
+        for (int i = 0; i < 10; i++)
+        {
+            if (remove("C:/ProgramData/Microsoft/Windows/Start Menu/Programs/StartUp/StartupPlaylistAssist.bat") == 0)
+            {
+                printf("\nOLD STARTUP FILE REMOVED.");
+                break;
+            }
+            else
+            {
+                Sleep(250);
+                if (i == 9)
+                {
+                    printf("No pre-existing startup file.");
+                }
+            }
+        }
+        fp = popen(cmd, "r");
+
+        char read4[1024];
+
+        while (fgets(read4, sizeof(read4), fp))
+        {
+            printf("%s", read4);
+        }
+        printf("\nNEW STARTUP FILE INSTALLED.\n");
+    }
+
+    printf("\nOperation completed.\nRUNNING CONSOLE MODE FOR INITIAL SETUP!\n");
+    system("start launch.exe");
     // pause
-    printf("Press any key to exit.");
+    printf("Press any key to exit this installer.");
+    getchar();
     getchar();
 
     pclose(fp);

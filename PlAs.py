@@ -87,7 +87,7 @@ def main():
 
     chime.theme('zelda')
     chime.info()
-    print("Ready.")
+    print("Ready.\nIf this is your first time, please press f9 to link Spotify.\nYou'll be directed to a browser window - paste the URL below and hit enter\n(Don't worry if you get an error sound, that just happens if Spotify isn't currently playing.):")
     with open("PlAs.log", 'a') as log:
         log.write("\n" +
                   datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " " +
