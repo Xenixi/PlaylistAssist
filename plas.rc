@@ -4,21 +4,21 @@
 1 ICON "plas.ico"
 
 1 VERSIONINFO
-FILEVERSION     1,2,1,0
-PRODUCTVERSION  1,2,1,0
+FILEVERSION     1,1,0,0
+PRODUCTVERSION  1,1,0,0
 BEGIN
   BLOCK "StringFileInfo"
   BEGIN
     BLOCK "040904E4"
     BEGIN
       VALUE "Xenixi", "/Xenixi"
-      VALUE "FileDescription", "Playlist Assist Launcher (console mode)"
-      VALUE "FileVersion", "1.2.1"
+      VALUE "FileDescription", "Playlist Assist (console mode)"
+      VALUE "FileVersion", "1.1.0"
       VALUE "InternalName", "PlaylistAssist"
-      VALUE "LegalCopyright", "© Kobe McManus. All rights reserved."
+      VALUE "LegalCopyright", "(C) Kobe McManus. All rights reserved."
       VALUE "OriginalFilename", "launch.exe"
       VALUE "ProductName", "Playlist Assist"
-      VALUE "ProductVersion", "1.2.1"
+      VALUE "ProductVersion", "1.1.0"
     END
   END
   BLOCK "VarFileInfo"

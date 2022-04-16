@@ -4,8 +4,8 @@
 1 ICON "plas_ins.ico"
 
 1 VERSIONINFO
-FILEVERSION     1,2,1,0
-PRODUCTVERSION  1,2,1,0
+FILEVERSION     1,1,1,0
+PRODUCTVERSION  1,1,1,0
 BEGIN
   BLOCK "StringFileInfo"
   BEGIN
@@ -13,12 +13,12 @@ BEGIN
     BEGIN
       VALUE "Xenixi", "/Xenixi"
       VALUE "FileDescription", "Playlist Assist Setup Utility"
-      VALUE "FileVersion", "1.2.1"
+      VALUE "FileVersion", "1.1.0"
       VALUE "InternalName", "PlaylistAssistSetup"
-      VALUE "LegalCopyright", "© Kobe McManus. All rights reserved."
+      VALUE "LegalCopyright", "(C) Kobe McManus. All rights reserved."
       VALUE "OriginalFilename", "setup.exe"
       VALUE "ProductName", "Playlist Assist Setup"
-      VALUE "ProductVersion", "1.2.1"
+      VALUE "ProductVersion", "1.1.0"
     END
   END
   BLOCK "VarFileInfo"

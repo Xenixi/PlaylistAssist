@@ -5,5 +5,4 @@
 *.log
 *.exe
 *.lnk
-*.ico
 build/*
