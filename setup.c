@@ -165,32 +165,58 @@ int main(int argc, char *argv[])
 
     char usr_choice;
     // NOT YET IMPLEMENTED: START MENU SHORTCUTS
-    /*
-     printf("\n----\nCreate Start Menu Shortcut?(y/n):");
-     usr_choice = getchar();
-     getchar();
 
-     if (usr_choice == 'y' && false)
-     {
-         // install shortcut
-         char cmd[4096] = "";
-         char *begin_cmd = "mklink /d \"C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Playlist Assist\" ";
-         char launch_path[2048];
-         _fullpath(launch_path, "/", 2048);
+    printf("\n----\nCreate Start Menu Shortcut?(y/n):");
+    usr_choice = getchar();
+    getchar();
 
-         strcat(cmd, begin_cmd);
-         strcat(cmd, launch_path);
+    if (usr_choice == 'y')
+    {
+        // install shortcut
 
-         fp = popen(cmd, "r");
+        char cmd[4096] = "start powershell.exe \"Set-ExecutionPolicy Unrestricted; ";
 
-         char read3[1024];
+        char launch_path[2048];
+        _fullpath(launch_path, ".", 2048);
 
-         while (fgets(read3, sizeof(read3), fp))
-         {
-             printf("%s", read3);
-         }
-     }
- */
+        char *cmd2 = "\\screate.ps1 \"";
+
+        strcat(cmd, launch_path);
+        strcat(cmd, cmd2);
+
+        // create the temporary script
+        system("echo $WshShell = New-Object -comObject WScript.Shell >> screate.ps1");
+        system("echo $Shortcut = $WshShell.CreateShortcut(\"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Launch Playlist Assist.lnk\") >> screate.ps1");
+
+        char echo_ln3_cmd[2048] = "echo $Shortcut.TargetPath = \"";
+
+        strcat(echo_ln3_cmd, launch_path);
+        strcat(echo_ln3_cmd, "\\launch-background.exe\" >> screate.ps1");
+
+        system(echo_ln3_cmd);
+
+        char echo_ln4_cmd[2048] = "echo $Shortcut.WorkingDirectory = \"";
+
+        strcat(echo_ln4_cmd, launch_path);
+        strcat(echo_ln4_cmd, "\" >> screate.ps1");
+
+        system(echo_ln4_cmd);
+
+        system("echo $Shortcut.Save() >> screate.ps1");
+
+        fp = popen(cmd, "r");
+
+        Sleep(1000);
+        system("powershell \"rm screate.ps1\"");
+
+        char read3[1024];
+
+        while (fgets(read3, sizeof(read3), fp))
+        {
+            printf("%s", read3);
+        }
+    }
+    /////////////////////////////
     printf("\n----\nRun On Startup?(y/n):");
 
     usr_choice = getchar();
