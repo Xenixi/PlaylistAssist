@@ -1,0 +1,28 @@
+#include <Windows.h>
+#include <winver.h>
+
+1 ICON "plas_ins.ico"
+
+1 VERSIONINFO
+FILEVERSION     1,2,1,0
+PRODUCTVERSION  1,2,1,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "Xenixi", "/Xenixi"
+      VALUE "FileDescription", "Playlist Assist Setup Utility"
+      VALUE "FileVersion", "1.2.1"
+      VALUE "InternalName", "PlaylistAssistSetup"
+      VALUE "LegalCopyright", "© Kobe McManus. All rights reserved."
+      VALUE "OriginalFilename", "setup.exe"
+      VALUE "ProductName", "Playlist Assist Setup"
+      VALUE "ProductVersion", "1.2.1"
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1252
+  END
+END
