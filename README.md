@@ -1,5 +1,6 @@
 Welcome to PlaylistAssist by Kobe McManus (github.com/xenixi). Set your hotkeys in hotkeys.config.
-
+__NOTICE: ALL VERSIONS BEFORE Release v1.1.1 HAVE A NONFUNCTIONAL CLIENT SECRET IN THE SOURCE THAT MUST BE CHANGED TO AN__
+__ACTIVE SECRET KEY FOR THE SOFTWARE TO WORK.__ 
 DEFAULT UTIL HOTKEYS:
 ctrl+shift+f1 exits. | ctrl+shift+f2 exits and starts new console process | Use alt+f1 to see if PlaylistAssist is running in background
 
