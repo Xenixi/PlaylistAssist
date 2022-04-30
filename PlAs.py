@@ -22,16 +22,26 @@ def main():
     global sp
     global key_map
 
+
+
+
     # Setup Spotify connection
     scope = "user-read-currently-playing, user-library-read, user-library-modify, playlist-read-private, playlist-modify-private, playlist-modify-public"
     client_id = "95609027f8414070a6854d114173ddd5"
-    client_secret = "dc92f50f182648a88ee87a03267ffcac"
-    redirect_uri = "http://www.google.com/"
+    client_secret = os.environ.get('PlAs_sp_secret')
+    redirect_uri = "http://github.com/Xenixi/PlaylistAssist"
 
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope,
-                                                   client_id=client_id,
-                                                   client_secret=client_secret,
-                                                   redirect_uri=redirect_uri))
+    try:
+        sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope,
+                                                    client_id=client_id,
+                                                    client_secret=client_secret,
+                                                    redirect_uri=redirect_uri))
+    except Exception as e:
+        print("Error linking Spotify! Possible invalid secret key!")
+        with open("PlAs.log", 'a') as log:
+            log.write("\n" +
+                      datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') +
+                      " " + "Error linking Spotify! Possible invalid secret key!")
 
     # Read user configs
 

@@ -132,10 +132,6 @@ int main(int argc, char *argv[])
 
     // Sleep(1500);
 
-    printf("\nInstalling shortcuts...\n");
-
-    printf("\n**Skipping this step...\n");
-
     printf("\nClearing cache...");
     for (int i = 0; i < 10; i++)
     {
@@ -164,7 +160,6 @@ int main(int argc, char *argv[])
     }
 
     char usr_choice;
-    // NOT YET IMPLEMENTED: START MENU SHORTCUTS
 
     printf("\n----\nCreate Start Menu Shortcut?(y/n):");
     usr_choice = getchar();
@@ -220,6 +215,7 @@ int main(int argc, char *argv[])
     printf("\n----\nRun On Startup?(y/n):");
 
     usr_choice = getchar();
+    getchar();
 
     if (usr_choice == 'y')
     {
@@ -263,9 +259,28 @@ int main(int argc, char *argv[])
         printf("\nNEW STARTUP FILE INSTALLED.\n");
     }
 
+    printf("\n----\nEnter Spotify Client Secret:");
+    char sp_client_secret[64];
+    fgets(sp_client_secret, 64, stdin);
+    strtok(sp_client_secret, "\n");
+
+    printf("\nSetting environment variable...\n");
+
+    char env_var_cmd[128] = "setx PlAs_sp_secret ";
+
+    strcat(env_var_cmd, sp_client_secret);
+
+    system(env_var_cmd);
+
+    char launch_cmd[128] = "set PlAs_sp_secret=";
+    char *launch_cmd_end = "&& start launch.exe";
+    strcat(launch_cmd, sp_client_secret);
+    strcat(launch_cmd, launch_cmd_end);
+
     printf("\nOperation completed.\nRUNNING CONSOLE MODE FOR INITIAL SETUP!\n");
-    system("start launch.exe");
-    // pause
+
+    system(launch_cmd);
+
     printf("Press any key to exit this installer.");
     getchar();
     getchar();
